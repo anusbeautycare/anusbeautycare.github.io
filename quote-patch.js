@@ -97,7 +97,7 @@ var mkInfo=document.createElement('p');mkInfo.className='wsnote';mkInfo.textCont
 mkWrap.appendChild(mkTitle);mkWrap.appendChild(mkInfo);
 var reg=[];
 function hdr(w,t){var h=document.createElement('div');h.style.cssText='display:flex;gap:8px;font-size:12px;color:#7a6a70;margin:8px 0 2px';h.innerHTML='<span style="flex:1">'+t[0]+'</span><span style="width:64px">'+t[1]+'</span><span style="width:74px"></span>';w.appendChild(h)}
-var curGrp='';function buildCards(list,wrap,pk){curGrp='';hdr(wrap,pk?['Rate per package (INR)','Qty']:['Rate (INR)','Persons']);list.forEach(function(r){
+var curGrp='';function buildCards(list,wrap,pk){curGrp='';hdr(wrap,pk?['Rate per package (INR)','Qty']:['Discounted rate (INR)','Persons']);list.forEach(function(r){
  if(r[1]===null){var h=document.createElement('p');h.className='wsnote';h.style.cssText='margin:12px 0 0;font-weight:600';h.textContent=r[0];curGrp=r[0];wrap.appendChild(h);return}
  var d=document.createElement('div');d.className='qrow';d.style.cssText='border-top:1px solid #eadde2;padding:8px 0';
  var nm=document.createElement('div');nm.textContent=r[0];nm.style.cssText='font-size:14px;line-height:1.3;margin-bottom:6px';
@@ -106,7 +106,7 @@ var curGrp='';function buildCards(list,wrap,pk){curGrp='';hdr(wrap,pk?['Rate per
  var np=document.createElement('input');np.type='number';np.min='1';np.max='99';np.step='1';np.value='1';np.setAttribute('aria-label',pk?'Number of packages':'Number of persons');np.style.cssText='width:64px;margin:0;height:40px;flex:none';
  var b=document.createElement('button');b.type='button';b.textContent='Add';b.style.cssText='width:74px;flex:none;height:40px;margin:0;padding:0';
  b.onclick=function(){var v=Number(p.value),c=Math.floor(Number(np.value));if(!p.value||!isFinite(v)||v<0){alert('Enter the rate first.');return}if(!isFinite(c)||c<1){alert('Enter the quantity (1 or more).');return}addPP(r[0],v,c,pk);b.textContent='Added';setTimeout(function(){b.textContent='Add'},1500)};
- if(!pk&&r[2]){var rg=document.createElement('div');rg.textContent='Regular rate \u20B9'+Number(r[2]).toLocaleString('en-IN')+'';rg.style.cssText='font-size:12px;color:#7a6a70;margin:-2px 0 6px';d.insertBefore(rg,nm.nextSibling)}
+ if(!pk&&r[2]){var rg=document.createElement('div');rg.textContent='Our rates \u20B9'+Number(r[2]).toLocaleString('en-IN')+'';rg.style.cssText='font-size:12px;color:#7a6a70;margin:-2px 0 6px';d.insertBefore(rg,nm.nextSibling)}
  line.appendChild(p);line.appendChild(np);line.appendChild(b);d.appendChild(nm);d.appendChild(line);wrap.appendChild(d);
  reg.push({name:r[0],p:p,pk:pk,list:wrap.id,grp:curGrp});
 });}
@@ -200,7 +200,7 @@ var st=document.createElement('style');st.textContent=
 '#quoteDoc .qb{text-align:right;font:12px Arial;color:#555}'+
 '#quoteDoc h3{font:bold 14px Arial;margin:18px 0 4px;color:#770f2e}#quoteDoc ol{font:13px Arial;margin:0;padding-left:20px}#quoteDoc li{margin:3px 0}'+
 '#ws-bill .billrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}#ws-bill .billrow>span:first-child{flex:1 1 100%}#ws-bill .billrow>span:nth-child(2){flex:1 1 auto;font-weight:600}#ws-bill .billrow>button{padding:8px 14px;min-height:0;height:auto;align-self:center}#ws-bill .billrow input{width:100%;box-sizing:border-box;margin:4px 0}'+
-'@media print{body.qprint{background:#fff}#quoteDoc{padding:0}@page{margin:14mm}}';
+'body.qprint #quoteDoc{border:1.2px solid #c4a15a;padding:22px 20px;font-family:Georgia,serif}'+'#quoteDoc .qh{border-bottom:1px solid #c4a15a}#quoteDoc .qh img{max-height:150px;max-width:80%}'+'#quoteDoc h1{font-weight:normal;letter-spacing:.45em;color:#770f2e}'+'#quoteDoc th{background:none;color:#770f2e;border-top:1.2px solid #c4a15a;border-bottom:1.2px solid #c4a15a}#quoteDoc td{border-bottom:.6px solid #eadfc8}#quoteDoc tr.g td{background:#fbf6ea;color:#770f2e;font:bold 12px Arial;letter-spacing:.12em;text-transform:uppercase}#quoteDoc s{color:#8a7f83}#quoteDoc td.d{color:#770f2e;font-weight:bold}#quoteDoc h3{border-bottom:1px solid #c4a15a;padding-bottom:4px;text-transform:uppercase;letter-spacing:.12em;font-size:13px}'+'@media print{body.qprint{background:#fff}#quoteDoc{padding:0}@page{margin:14mm}}';
 document.head.appendChild(st);
 function esc(x){return String(x).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 function money(p){return String.fromCharCode(8377)+(p/100).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2})}
@@ -229,13 +229,14 @@ function buildPriceDoc(){
  var logo=document.querySelector('img[alt$="current logo"]');
  var rows=[],lastG=null,n=0;var R=String.fromCharCode(8377);reg.filter(function(r){return !r.pk}).forEach(function(r){
   var v=r.p.value,x=mk.filter(function(m){return m[0]===r.name})[0],rg=x&&x[2];
-  if(r.grp!==lastG){lastG=r.grp;rows.push('<tr><td colspan="4" style="background:#f6eef1;font-weight:bold;color:#770f2e">'+esc(lastG)+'</td></tr>')}n++;rows.push('<tr><td>'+n+'</td><td>'+esc(r.name)+'</td><td class="a">'+(rg?'<s>'+R+Number(rg).toLocaleString('en-IN')+'</s>':'')+'</td><td class="a">'+(v?R+Number(v).toLocaleString('en-IN'):'To be confirmed')+'</td></tr>')});
+  if(r.grp!==lastG){lastG=r.grp;rows.push('<tr class="g"><td colspan="4">'+esc(lastG)+'</td></tr>')}n++;
+  rows.push('<tr><td>'+n+'</td><td>'+esc(r.name)+'</td><td class="a">'+(rg?'<s>'+R+Number(rg).toLocaleString('en-IN')+'</s>':'&mdash;')+'</td><td class="a d">'+(v?R+Number(v).toLocaleString('en-IN'):'To be confirmed')+'</td></tr>')});
  var nt=$('quoteNote').value.trim(),cl=$('billClient').value.trim();
  var pts=ta.value.split('\n').map(function(x){return x.trim()}).filter(function(x){return x});
  var th=pts.map(function(x){var i=x.indexOf(':');return '<li>'+(i<0?esc(x):'<b>'+esc(x.slice(0,i))+'</b>: '+esc(x.slice(i+1).trim()))+'</li>'}).join('');
  d.innerHTML='<div class="qh">'+(logo?'<img src="'+logo.src+'" alt="Anu\'s Beauty Care logo">':'<div class="qw">Anu\'s<small>BEAUTY CARE</small></div>')+'</div>'+
  '<h1>QUOTATION</h1><p class="qm" style="text-align:center">Makeup rates, per person, per makeup</p>'+(cl?'<p class="qm"><b>Client:</b> '+esc(cl)+'</p>':'')+(nt?'<p class="qm">'+esc(nt)+'</p>':'')+
- '<table><thead><tr><th>#</th><th>Makeup</th><th class="a">Regular rate</th><th class="a">Our rate</th></tr></thead><tbody>'+rows.join('')+'</tbody></table>'+
+ '<table><thead><tr><th>#</th><th>Makeup</th><th class="a">Our rates</th><th class="a">Discounted rates</th></tr></thead><tbody>'+rows.join('')+'</tbody></table>'+
  '<p class="qm" style="font-size:12px;color:#555">No change in rate for Men\'s Makeup and Basic Makeup + Hairstyle.</p><h3>Terms and conditions</h3><ol>'+th+'</ol>';
 }
 function doPricePrint(){buildPriceDoc();document.body.classList.add('qprint');window.__qp=1;setTimeout(function(){window.print()},50)}
