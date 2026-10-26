@@ -56,11 +56,15 @@ $('pkgAdd').onclick=function(){
 var panelTitle=document.querySelector('#ws-bill .wspanel:nth-child(2) h2');
 var shareBtn=[].slice.call(document.querySelectorAll('#ws-bill button')).filter(function(b){return /Send bill on WhatsApp/.test(b.textContent)})[0];
 var reviewLabel=document.querySelector('#billShareReview label');
+function btn(re){return [].slice.call(document.querySelectorAll('#ws-bill button')).filter(function(b){return re.test(b.textContent)})[0]}
+var copyBtn=btn(/^(Copy bill text|Copy quotation text)$/),saveBtn=btn(/^Save (bill|quotation)/);
 function isQuote(){return $('docType').value==='quote'}
 function labels(){var q=isQuote();
  if(panelTitle)panelTitle.textContent=q?'Quotation preview':'Bill preview';
  if(shareBtn)shareBtn.textContent=q?'Send quotation on WhatsApp':'Send bill on WhatsApp';
  if(reviewLabel)reviewLabel.textContent=q?'Quotation text to review':'Bill text to review';
+ if(copyBtn)copyBtn.textContent=q?'Copy quotation text':'Copy bill text';
+ if(saveBtn)saveBtn.textContent=q?'Save quotation \u00b7 connection pending':'Save bill \u00b7 connection pending';
 }
 $('docType').onchange=function(){labels();if(!$('billShareReview').hidden)reviewBillShare()};
 var orig=billShareContent;
