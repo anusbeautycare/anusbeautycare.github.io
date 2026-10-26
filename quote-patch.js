@@ -167,6 +167,7 @@ var st=document.createElement('style');st.textContent=
 '#quoteDoc .qt{text-align:right;font:bold 20px Georgia,serif;color:#770f2e;margin-top:12px}'+
 '#quoteDoc .qb{text-align:right;font:12px Arial;color:#555}'+
 '#quoteDoc h3{font:bold 14px Arial;margin:18px 0 4px;color:#770f2e}#quoteDoc ol{font:13px Arial;margin:0;padding-left:20px}#quoteDoc li{margin:3px 0}'+
+'#ws-bill .billrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}#ws-bill .billrow>span:first-child{flex:1 1 100%}#ws-bill .billrow>span:nth-child(2){flex:1 1 auto;font-weight:600}#ws-bill .billrow>button{padding:8px 14px;min-height:0;height:auto;align-self:center}#ws-bill .billrow input{width:100%;box-sizing:border-box;margin:4px 0}'+
 '@media print{body.qprint{background:#fff}#quoteDoc{padding:0}@page{margin:14mm}}';
 document.head.appendChild(st);
 function esc(x){return String(x).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
@@ -177,10 +178,10 @@ function buildDoc(){
  var rows=lines.map(function(l,i){var a=l.base!==undefined?esc(l.base)+'<small>'+String.fromCharCode(8377)+l.rate+' per person per makeup x '+l.n+(l.n===1?' person':' persons')+'</small>':esc(l.name);return '<tr><td>'+(i+1)+'</td><td>'+a+'</td><td class="a">'+money(l.amount)+'</td></tr>'});
  var pts=ta.value.split('\n').map(function(x){return x.trim()}).filter(function(x){var i=x.indexOf(':');return x&&(i<0||x.slice(i+1).trim())});
  var cl=$('billClient').value.trim(),nt=$('quoteNote').value.trim();
- d.innerHTML='<div class="qh">'+(logo?'<img src="'+logo.src+'" alt="Anu\'s Beauty Care logo">':'')+'<div class="qw">Anu\'s<small>BEAUTY CARE</small></div></div>'+
+ d.innerHTML='<div class="qh">'+(logo?'<img src="'+logo.src+'" alt="Anu\'s Beauty Care logo">':'')+(logo?'':'<div class="qw">Anu\'s<small>BEAUTY CARE</small></div>')+'</div>'+
  '<h1>'+(isQuote()?'QUOTATION':'BILL DRAFT')+'</h1>'+(cl?'<p class="qm"><b>Client:</b> '+esc(cl)+'</p>':'')+(nt?'<p class="qm">'+esc(nt)+'</p>':'')+
  '<table><thead><tr><th>#</th><th>Description</th><th class="a">Amount</th></tr></thead><tbody>'+(rows.join('')||'<tr><td colspan="3">No items added yet.</td></tr>')+'</tbody></table>'+
- '<div class="qt">Total '+esc($('billTotal').textContent)+'</div><div class="qb">'+esc($('billBreakdown').textContent)+'</div>'+
+ '<div class="qt">Total '+esc($('billTotal').textContent)+'</div><div class="qb">'+esc($('billBreakdown').textContent.replace(/\s*Draft total only\.?/,''))+'</div>'+
  (pts.length?'<h3>Terms and conditions</h3><ol>'+pts.map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ol>':'');
 }
 function doPrint(){buildDoc();document.body.classList.add('qprint');window.__qp=1;setTimeout(function(){window.print()},50)}
@@ -188,6 +189,6 @@ window.addEventListener('afterprint',function(){document.body.classList.remove('
 window.__anuQuotePreview=function(){buildDoc();document.body.classList.add('qprint')};
 var pb=document.createElement('button');pb.type='button';pb.id='quotePrint';pb.textContent='Print / Save as PDF (branded)';pb.onclick=doPrint;
 var oldPrint=btn(/^Print draft$/);
-if(oldPrint&&oldPrint.parentNode)oldPrint.parentNode.insertBefore(pb,oldPrint.nextSibling);
+if(oldPrint&&oldPrint.parentNode){oldPrint.parentNode.insertBefore(pb,oldPrint.nextSibling);var hn=document.createElement('p');hn.className='wsnote';hn.textContent='PDF: tap the branded button, then in the print screen choose Save as PDF (iPhone: use Share, Print, then pinch the preview open and share or save the PDF).';pb.parentNode.insertBefore(hn,pb.nextSibling)}
 document.title=document.title;
 })();
