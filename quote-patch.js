@@ -206,7 +206,7 @@ var st=document.createElement('style');st.textContent=
 '#quoteDoc .zt{text-align:center;font-style:italic;font-size:14px;letter-spacing:.1em;color:#a8864f;margin-top:6px}'+
 '#quoteDoc .zd{display:flex;align-items:center;justify-content:center;gap:10px;margin:10px 0 12px}#quoteDoc .zd i{width:70px;height:1px;background:#bdb3a4}#quoteDoc .zd b{width:6px;height:6px;background:#a8864f;transform:rotate(45deg)}'+
 '#quoteDoc .zh{font:300 24px Inter,Arial,sans-serif;letter-spacing:.18em;text-align:center}'+
-'#quoteDoc .zi{display:flex;gap:10px;border-top:1px solid #d9d2c6;border-bottom:1px solid #e3d6b8;margin-top:16px;padding:8px 4px 10px}#quoteDoc .zi div{flex:1;min-height:24px;font-size:16px;overflow-wrap:anywhere}'+
+'#quoteDoc .zi{display:flex;gap:10px;border-top:1px solid #d9d2c6;border-bottom:1px solid #e3d6b8;margin-top:16px;padding:8px 4px 10px}#quoteDoc .zi div{flex:1;min-height:34px;border-bottom:1px solid #8c7a55;font-size:16px;overflow-wrap:anywhere}'+
 '#quoteDoc .lb{display:block;font:500 9px Inter,Arial,sans-serif;letter-spacing:.26em;color:#a8864f;text-transform:uppercase;margin-bottom:3px}'+
 '#quoteDoc .zf table{width:100%;border-collapse:collapse;margin-top:14px}#quoteDoc .zf th{background:none;font:500 9px Inter,Arial,sans-serif;letter-spacing:.2em;color:#8d6c35;text-transform:uppercase;padding:8px 5px;border-top:0;border-bottom:1px solid #b8975c;text-align:left}'+
 '#quoteDoc .zf th.c,#quoteDoc .zf td.c{text-align:center}#quoteDoc .zf th.a,#quoteDoc .zf td.a{text-align:right;white-space:nowrap}'+
@@ -222,7 +222,7 @@ function money(p){return String.fromCharCode(8377)+(p/100).toLocaleString('en-IN
 function zHead(title,sub){
  var logo=document.querySelector('img[alt$="current logo"]');var nt=$('quoteNote').value.trim(),cl=$('billClient').value.trim();
  return '<div class="zf"><div class="zl">'+(logo?'<img src="'+logo.src+'" alt="Anu\'s Beauty Care logo">':'<div style="font-size:26px;color:#770f2e">Anu\'s Beauty Care</div>')+'</div><div class="zt">A space for beauty. A moment for you.</div><div class="zd"><i></i><b></b><i></i></div><div class="zh">'+title+'</div>'+(sub?'<div style="text-align:center;font:italic 15px Georgia,serif;color:#6d6459;margin-top:4px">'+sub+'</div>':'')+
- '<div class="zi"><div><span class="lb">Client</span>'+esc(cl)+'</div><div style="flex:2"><span class="lb">Event date / venue</span>'+esc(nt)+'</div></div>';
+ '<div class="zi"><div><span class="lb">Client</span>'+esc(cl)+'</div>'+(nt?'<div style="flex:2"><span class="lb">Date / Venue</span>'+esc(nt)+'</div>':'<div><span class="lb">Date</span></div><div><span class="lb">Venue</span></div>')+'</div>';
 }
 function zTerms(extra){
  var pts=ta.value.split('\n').map(function(x){return x.trim()}).filter(function(x){var i=x.indexOf(':');return x&&(i<0||x.slice(i+1).trim())});
