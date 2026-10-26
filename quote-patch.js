@@ -78,16 +78,14 @@ window.billShareContent=billShareContent=function(){
 
 /* Makeup price list copied from the owner's two handwritten note pages. Rates are as written. Nothing is added to the quotation until Add is tapped. */
 var mk=[
- ['Notes page 1 (with product)',null],
- ['Basic Make up + Hair Style (with product)','2700','"My product" is crossed out; "with product" kept.'],
- ['Corrective Make up: dark spot, contouring, hi-light + eye make up (with product)','','Rate is written as 5500 or 6500: the first digit is written over. Not confirmed, so the rate is blank. Enter it after you confirm.'],
- ['Corrective Make up (second rate, confirm)','','Notes show (8000/-) next to a hard to read word. Not confirmed, so the rate is blank. Enter it only after you confirm.'],
- ['HD Make up / long lasting, contour, hi-lights, eye make up on good product (with products)','9500','8000 is crossed out, 9500 written.'],
- ['HD / long lasting (second rate, confirm)','','Notes show (12500) next to a word that reads like "want". Not confirmed, so the rate is blank. Enter it only after you confirm.'],
- ['Notes page 2 (rates with crossed-out older prices)',null],
- ['Man Make up (if the product is yours)','2000','Underlined. Product wording is not fully clear. CONFIRM.'],
- ['Corrective Make up (Advance)','3500','3000 is crossed out, 3500 written. Product not stated.'],
- ['HD Make up','4500','4000 is crossed out, 4500 written. Product not stated.']
+ ['With salon products',null],
+ ['Basic Makeup + Hairstyle','2700',''],
+ ['Corrective Makeup: dark-spot correction, contouring and highlights, with eye makeup','6500','8000'],
+ ['HD / Long-lasting Makeup: contouring, highlights and eye makeup, using good-quality products','9500','12500'],
+ ['If the client provides the products',null],
+ ["Men's Makeup",'2000',''],
+ ['Corrective Makeup (Advance)','3500',''],
+ ['HD Makeup','4500','']
 ];
 
 function ppSub(rate,c,pk){var n=pk?'package':'person';return String.fromCharCode(8377)+rate+' per '+(pk?'package':'person per makeup')+' x '+c+' '+n+(c===1?'':'s')}
@@ -95,22 +93,26 @@ function ppName(base,rate,c,pk){return base+' ('+ppSub(rate,c,pk)+')'}
 function addPP(base,rate,c,pk){lines.push({name:ppName(base,rate,c,pk),amount:Math.round(rate*c*100),base:base,rate:rate,n:c,pk:pk});renderBill()}
 var mkWrap=document.createElement('div');mkWrap.id='mkList';
 var mkTitle=document.createElement('h3');mkTitle.style.cssText='margin:22px 0 4px;font-size:18px';mkTitle.textContent='Makeup price list from your notes';
-var mkInfo=document.createElement('p');mkInfo.className='wsnote';mkInfo.textContent='Rates are per person, per makeup, as written in your two note pages. Every rate is per person, per makeup. Set the number of persons on each item (it starts at 1). Change the name or rate here, then tap Add. After adding, tap Edit on the line to change it again. Page 2 also says: no change for Man and Basic Make up. Travel allowance (the circled Petrol) and food are listed under Terms and conditions below.';
+var mkInfo=document.createElement('p');mkInfo.className='wsnote';mkInfo.textContent='Rate per person, per makeup. Set persons, tap Add. Use Edit on an added line to change it.';
 mkWrap.appendChild(mkTitle);mkWrap.appendChild(mkInfo);
-function buildCards(list,wrap,pk){list.forEach(function(r){
- if(r[1]===null){var h=document.createElement('p');h.className='wsnote';h.style.cssText='margin-top:16px;font-weight:600';h.textContent=r[0];wrap.appendChild(h);return}
- var d=document.createElement('div');d.style.cssText='border:1px solid #e3d6dc;border-radius:14px;padding:12px;margin-top:10px';
- var n=document.createElement('input');n.value=r[0];n.maxLength=140;n.setAttribute('aria-label','Item name');
- var p=document.createElement('input');p.type='number';p.min='0';p.step='0.01';p.value=r[1];p.placeholder=(pk?'Enter rate per package':'Enter rate per person');p.setAttribute('aria-label',(pk?'Rate per package in INR':'Rate per person in INR'));var pl=document.createElement('label');pl.textContent=(pk?'Rate per package (INR)':'Rate per person, per makeup (INR)');var nl=document.createElement('label');nl.textContent=(pk?'Quantity (number of packages)':'Number of persons');var np=document.createElement('input');np.type='number';np.min='1';np.max='99';np.step='1';np.value='1';np.setAttribute('aria-label',(pk?'Quantity (number of packages)':'Number of persons'));
- var t=document.createElement('p');t.className='wsnote';t.textContent=r[2];
- var b=document.createElement('button');b.type='button';b.textContent='Add to quotation';
- b.onclick=function(){var v=Number(p.value),c=Math.floor(Number(np.value));if(!n.value.trim()){alert('Enter the item name.');return}if(!p.value||!isFinite(v)||v<0){alert('Enter the rate first.');return}if(!isFinite(c)||c<1){alert('Enter the quantity (1 or more).');return}addPP(n.value.trim(),v,c,pk);b.textContent='Added';setTimeout(function(){b.textContent='Add to quotation'},2000)};
- d.appendChild(n);d.appendChild(pl);d.appendChild(p);d.appendChild(nl);d.appendChild(np);d.appendChild(t);d.appendChild(b);wrap.appendChild(d);
+var reg=[];
+function hdr(w,t){var h=document.createElement('div');h.style.cssText='display:flex;gap:8px;font-size:12px;color:#7a6a70;margin:8px 0 2px';h.innerHTML='<span style="flex:1">'+t[0]+'</span><span style="width:64px">'+t[1]+'</span><span style="width:74px"></span>';w.appendChild(h)}
+var curGrp='';function buildCards(list,wrap,pk){curGrp='';hdr(wrap,pk?['Rate per package (INR)','Qty']:['Rate (INR)','Persons']);list.forEach(function(r){
+ if(r[1]===null){var h=document.createElement('p');h.className='wsnote';h.style.cssText='margin:12px 0 0;font-weight:600';h.textContent=r[0];curGrp=r[0];wrap.appendChild(h);return}
+ var d=document.createElement('div');d.className='qrow';d.style.cssText='border-top:1px solid #eadde2;padding:8px 0';
+ var nm=document.createElement('div');nm.textContent=r[0];nm.style.cssText='font-size:14px;line-height:1.3;margin-bottom:6px';
+ var line=document.createElement('div');line.style.cssText='display:flex;gap:8px;align-items:center';
+ var p=document.createElement('input');p.type='number';p.min='0';p.step='0.01';p.value=r[1];p.placeholder='Rate to confirm';p.setAttribute('aria-label',(pk?'Rate per package in INR':'Rate per person in INR'));p.style.cssText='flex:1;min-width:0;width:auto;margin:0;height:40px';
+ var np=document.createElement('input');np.type='number';np.min='1';np.max='99';np.step='1';np.value='1';np.setAttribute('aria-label',pk?'Number of packages':'Number of persons');np.style.cssText='width:64px;margin:0;height:40px;flex:none';
+ var b=document.createElement('button');b.type='button';b.textContent='Add';b.style.cssText='width:74px;flex:none;height:40px;margin:0;padding:0';
+ b.onclick=function(){var v=Number(p.value),c=Math.floor(Number(np.value));if(!p.value||!isFinite(v)||v<0){alert('Enter the rate first.');return}if(!isFinite(c)||c<1){alert('Enter the quantity (1 or more).');return}addPP(r[0],v,c,pk);b.textContent='Added';setTimeout(function(){b.textContent='Add'},1500)};
+ if(!pk&&r[2]){var rg=document.createElement('div');rg.textContent='Regular rate \u20B9'+Number(r[2]).toLocaleString('en-IN')+'';rg.style.cssText='font-size:12px;color:#7a6a70;margin:-2px 0 6px';d.insertBefore(rg,nm.nextSibling)}
+ line.appendChild(p);line.appendChild(np);line.appendChild(b);d.appendChild(nm);d.appendChild(line);wrap.appendChild(d);
+ reg.push({name:r[0],p:p,pk:pk,list:wrap.id,grp:curGrp});
 });}
 box.insertBefore(mkWrap,box.querySelector('h3'));
 buildCards(mk,mkWrap,false);
 var br=[
- ['Headline prices shown on the app Bridal Packages page',null],
  ['Pre Bridal Basic: face and back bleach / de-tan, bridal facial, hand and full leg wax, manicure, pedicure, threading','5500',''],
  ['Pre Bridal Advanced: face and back bleach / de-tan, advanced bridal facial, hand and full leg wax, body polishing, hand nail art, threading','12000',''],
  ['Pre Bridal Premium: face / body bleach, face polishing, advanced body polishing and pack, special facial, full-body or hand-and-leg wax, hair spa, hand and toe nail art, threading','20000',''],
@@ -120,7 +122,7 @@ var br=[
  ['Make-up + Pre Bridal: 2 HD + 1 Haldi / Sangeet + 1 touch-up + Basic pre bridal','43000',''],
  ['Make-up + Pre Bridal: 2 HD + 1 Haldi / Sangeet + 1 touch-up + Advanced pre bridal','55000',''],
  ['Make-up + Pre Bridal: 2 HD + 1 Haldi / Sangeet + 1 touch-up + Premium pre bridal','62500',''],
- ["Anu's Package list: the app says confirmation is needed before billing, so the rate is left blank. Enter the confirmed rate to add.",null],
+ ["Anu's Package (rates to confirm before billing)",null],
  ["Anu's Package 1: 1 HD make-up + Basic pre bridal",'',"The app page shows 15,500 for this package. Confirmation needed before billing."],
  ["Anu's Package 2: 1 HD + 1 Haldi / Sangeet + Basic pre bridal",'',"The app page shows 25,500. Confirmation needed before billing."],
  ["Anu's Package 3: 1 HD + 1 Haldi / Sangeet + Advanced pre bridal",'',"The app page shows 33,000. Confirmation needed before billing."],
@@ -130,8 +132,10 @@ var br=[
 ];
 var brWrap=document.createElement('div');brWrap.id='brList';
 var brTitle=document.createElement('h3');brTitle.style.cssText='margin:22px 0 4px;font-size:18px';brTitle.textContent='Bridal packages';
-var brInfo=document.createElement('p');brInfo.className='wsnote';brInfo.textContent='Packages and headline prices copied from the app Bridal Packages page. Rate is per package, quantity starts at 1. You can change the name or rate before adding, and tap Edit on the line afterwards.';
-brWrap.appendChild(brTitle);brWrap.appendChild(brInfo);buildCards(br,brWrap,true);
+var brInfo=document.createElement('p');brInfo.className='wsnote';brInfo.textContent='Rate is per package. Anu\'s Package rates stay blank until confirmed.';
+var brBody=document.createElement('div');brBody.hidden=true;brTitle.textContent='Bridal packages \u25B8';brTitle.style.cursor='pointer';brTitle.setAttribute('role','button');brTitle.tabIndex=0;
+brTitle.onclick=function(){brBody.hidden=!brBody.hidden;brTitle.textContent='Bridal packages '+(brBody.hidden?'\u25B8':'\u25BE')};
+brWrap.appendChild(brTitle);brBody.appendChild(brInfo);buildCards(br,brBody,true);brWrap.appendChild(brBody);
 box.insertBefore(brWrap,mkWrap.nextSibling);
 
 
@@ -165,10 +169,11 @@ window.renderBill=renderBill=function(){origRender.apply(this,arguments);decorat
 renderBill();
 
 /* Terms and conditions: separate editable points. Headings only; no amounts or rules are filled in. A heading with nothing after the colon is left out of the shared text. */
+var TERMS=['Travel allowance (petrol): travel allowance arrangements will be agreed with the client before the booking is confirmed.','Food: food arrangements for the makeup team will be agreed before the booking is confirmed.','Room for equipment and freshen up: arrangements for a room or space to keep the equipment and to freshen up will be agreed before the booking is confirmed.','Advance payment: the advance payment amount and payment date will be agreed before the booking is confirmed.','Remaining payment: the remaining payment amount and payment schedule will be agreed before the booking is confirmed.'].join('\n');
 var tl=document.createElement('label');tl.setAttribute('for','quoteTerms');tl.textContent='Terms and conditions (edit each point)';
-var tn=document.createElement('p');tn.className='wsnote';tn.textContent='Write the detail after each colon. Points left empty are not added to the text you send.';
+var tn=document.createElement('p');tn.className='wsnote';tn.textContent='Edit any point. Amounts and timing are not filled in; add them when confirmed.';
 var ta=document.createElement('textarea');ta.id='quoteTerms';ta.rows=7;ta.maxLength=1200;ta.style.cssText='width:100%;box-sizing:border-box';
-ta.value='Travel allowance: \nFood: \nRoom for equipment and freshen up: \nAdvance payment: \nRemaining payment: ';
+ta.value=TERMS;
 box.appendChild(tl);box.appendChild(tn);box.appendChild(ta);
 var origShare2=billShareContent;
 window.billShareContent=billShareContent=function(){
@@ -180,7 +185,7 @@ window.billShareContent=billShareContent=function(){
 
 /* Branded quote-only print / PDF output. Uses the page's own logo and totals. */
 var st=document.createElement('style');st.textContent=
-'#quoteDoc{display:none}'+
+'#quoteDoc{display:none}'+'#ws-bill .wsgrid>*{min-width:0;max-width:100%}#quoteExtras,#savedDocs{min-width:0;max-width:100%}'+
 'body.qprint>*:not(#quoteDoc){display:none!important}'+
 'body.qprint #quoteDoc{display:block;background:#fff;color:#222;padding:22px 20px;max-width:760px;margin:0 auto;font-family:Georgia,serif;box-sizing:border-box}'+
 '#quoteDoc .qh{text-align:center;border-bottom:2px solid #770f2e;padding-bottom:12px}'+
@@ -217,5 +222,64 @@ window.__anuQuotePreview=function(){buildDoc();document.body.classList.add('qpri
 var pb=document.createElement('button');pb.type='button';pb.id='quotePrint';pb.textContent='Print / Save as PDF (branded)';pb.onclick=doPrint;
 var oldPrint=btn(/^Print draft$/);
 if(oldPrint&&oldPrint.parentNode){oldPrint.parentNode.insertBefore(pb,oldPrint.nextSibling);var hn=document.createElement('p');hn.className='wsnote';hn.textContent='PDF: tap the branded button, then in the print screen choose Save as PDF (iPhone: use Share, Print, then pinch the preview open and share or save the PDF).';pb.parentNode.insertBefore(hn,pb.nextSibling)}
+
+/* Price list quotation (from the owner's handwritten notes): customer-facing document with the Anu logo. */
+function buildPriceDoc(){
+ var d=$('quoteDoc');if(!d){d=document.createElement('div');d.id='quoteDoc';document.body.appendChild(d)}
+ var logo=document.querySelector('img[alt$="current logo"]');
+ var rows=[],lastG=null,n=0;var R=String.fromCharCode(8377);reg.filter(function(r){return !r.pk}).forEach(function(r){
+  var v=r.p.value,x=mk.filter(function(m){return m[0]===r.name})[0],rg=x&&x[2];
+  if(r.grp!==lastG){lastG=r.grp;rows.push('<tr><td colspan="4" style="background:#f6eef1;font-weight:bold;color:#770f2e">'+esc(lastG)+'</td></tr>')}n++;rows.push('<tr><td>'+n+'</td><td>'+esc(r.name)+'</td><td class="a">'+(rg?'<s>'+R+Number(rg).toLocaleString('en-IN')+'</s>':'')+'</td><td class="a">'+(v?R+Number(v).toLocaleString('en-IN'):'To be confirmed')+'</td></tr>')});
+ var nt=$('quoteNote').value.trim(),cl=$('billClient').value.trim();
+ var pts=ta.value.split('\n').map(function(x){return x.trim()}).filter(function(x){return x});
+ var th=pts.map(function(x){var i=x.indexOf(':');return '<li>'+(i<0?esc(x):'<b>'+esc(x.slice(0,i))+'</b>: '+esc(x.slice(i+1).trim()))+'</li>'}).join('');
+ d.innerHTML='<div class="qh">'+(logo?'<img src="'+logo.src+'" alt="Anu\'s Beauty Care logo">':'<div class="qw">Anu\'s<small>BEAUTY CARE</small></div>')+'</div>'+
+ '<h1>QUOTATION</h1><p class="qm" style="text-align:center">Makeup rates, per person, per makeup</p>'+(cl?'<p class="qm"><b>Client:</b> '+esc(cl)+'</p>':'')+(nt?'<p class="qm">'+esc(nt)+'</p>':'')+
+ '<table><thead><tr><th>#</th><th>Makeup</th><th class="a">Regular rate</th><th class="a">Our rate</th></tr></thead><tbody>'+rows.join('')+'</tbody></table>'+
+ '<p class="qm" style="font-size:12px;color:#555">No change in rate for Men\'s Makeup and Basic Makeup + Hairstyle.</p><h3>Terms and conditions</h3><ol>'+th+'</ol>';
+}
+function doPricePrint(){buildPriceDoc();document.body.classList.add('qprint');window.__qp=1;setTimeout(function(){window.print()},50)}
+window.__anuPricePreview=function(){buildPriceDoc();document.body.classList.add('qprint')};
+var pp2=document.createElement('button');pp2.type='button';pp2.id='quotePricePrint';pp2.textContent='Print / PDF: makeup price list quotation';pp2.onclick=doPricePrint;
+mkWrap.appendChild(pp2);
+
+/* Saved quotations and bills: kept only in this phone's browser storage, shown in their own section. */
+var SK='anuQuoteList.v1';
+function loadList(){try{return JSON.parse(localStorage.getItem(SK)||'[]')}catch(e){return []}}
+function storeList(a){try{localStorage.setItem(SK,JSON.stringify(a));return true}catch(e){alert('Could not save on this device.');return false}}
+var sec=document.createElement('div');sec.className='wspanel';sec.id='savedDocs';
+var panel=panelTitle&&panelTitle.closest?panelTitle.closest('.wspanel'):null;
+if(panel&&panel.parentNode)panel.parentNode.insertBefore(sec,panel.nextSibling);else box.parentNode.appendChild(sec);
+function renderSaved(){
+ var a=loadList();sec.textContent='';
+ var h=document.createElement('h2');h.textContent='Created quotations and bills ('+a.length+')';sec.appendChild(h);
+ var n=document.createElement('p');n.className='wsnote';n.textContent='Saved on this phone only. Not sent or shared.';sec.appendChild(n);
+ if(!a.length){var e=document.createElement('p');e.className='wsnote';e.textContent='Nothing saved yet. Build a quotation or bill above and tap Save to list.';sec.appendChild(e);return}
+ a.slice().reverse().forEach(function(x){
+  var tot=x.lines.reduce(function(t,l){return t+l.amount},0);
+  var d=document.createElement('div');d.style.cssText='border-top:1px solid #eadde2;padding:10px 0';
+  var t=document.createElement('div');t.style.cssText='font-weight:600;font-size:15px';t.textContent=(x.type==='quote'?'Quotation':'Bill')+' - '+(x.client||'No client name');
+  var m=document.createElement('div');m.style.cssText='font-size:13px;color:#7a6a70;margin:2px 0 8px';m.textContent=x.date+' | '+x.lines.length+' item'+(x.lines.length===1?'':'s')+' | '+money(tot);
+  var r=document.createElement('div');r.style.cssText='display:flex;gap:8px';
+  function mb(txt,fn){var b=document.createElement('button');b.type='button';b.textContent=txt;b.style.cssText='flex:1;height:40px;margin:0;padding:0';b.onclick=fn;r.appendChild(b)}
+  mb('Open',function(){openDoc(x)});
+  mb('Print / PDF',function(){openDoc(x);setTimeout(doPrint,100)});
+  mb('Delete',function(){if(confirm('Delete this saved item?')){storeList(loadList().filter(function(y){return y.id!==x.id}));renderSaved()}});
+  d.appendChild(t);d.appendChild(m);d.appendChild(r);sec.appendChild(d);
+ });
+}
+function openDoc(x){
+ lines.length=0;x.lines.forEach(function(l){lines.push(JSON.parse(JSON.stringify(l)))});
+ $('docType').value=x.type;$('billClient').value=x.client||'';$('quoteNote').value=x.note||'';ta.value=x.terms||ta.value;
+ labels();renderBill();$('quoteExtras').scrollIntoView({behavior:'smooth',block:'start'});
+}
+var sb=document.createElement('button');sb.type='button';sb.id='quoteSave';sb.textContent='Save to Created list';
+sb.onclick=function(){
+ if(!lines.length){alert('Add at least one item first.');return}
+ var a=loadList();a.push({id:Date.now()+'-'+Math.random().toString(36).slice(2,7),type:isQuote()?'quote':'bill',client:$('billClient').value.trim(),note:$('quoteNote').value.trim(),terms:ta.value,date:new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}),lines:JSON.parse(JSON.stringify(lines))});
+ if(storeList(a)){renderSaved();sb.textContent='Saved';setTimeout(function(){sb.textContent='Save to Created list'},1500)}
+};
+pb.parentNode.insertBefore(sb,pb);
+renderSaved();
 document.title=document.title;
 })();
