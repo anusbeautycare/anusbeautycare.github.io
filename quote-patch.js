@@ -250,7 +250,7 @@ function buildPriceDoc(){
   var v=r.p.value,x=mk.filter(function(m){return m[0]===r.name})[0],rg=x&&x[2];
   if(r.grp!==lastG){lastG=r.grp;n=0;rows.push('<tr class="g"><td colspan="4">'+esc(lastG)+'</td></tr>')}n++;
   rows.push('<tr><td class="c">'+n+'</td><td class="b">'+esc(r.name)+'</td><td class="a">'+(rg?R+Number(rg).toLocaleString('en-IN'):'&mdash;')+'</td><td class="a d">'+(v?R+Number(v).toLocaleString('en-IN'):'To be confirmed')+'</td></tr>')});
- d.innerHTML=zHead('QUOTATION','Makeup rates, per person, per makeup')+
+ d.innerHTML=zHead('QUOTATION','Rates per person, per makeup')+
  '<table><thead><tr><th class="c" style="width:40px">Sr.<br>No.</th><th>Particular</th><th class="a">Our rates</th><th class="a">Discounted rates</th></tr></thead><tbody>'+rows.join('')+'</tbody></table>'+zTerms('No change in rate for Men\'s Makeup and Basic Makeup + Hairstyle.');
 }
 function doPricePrint(){buildPriceDoc();document.body.classList.add('qprint');window.__qp=1;setTimeout(function(){window.print()},50)}
