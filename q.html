@@ -2,7 +2,7 @@
 (function(){var f=document.getElementById('app'),n=0;
 var t=setInterval(function(){
  try{var w=f.contentWindow,d=f.contentDocument;
-  if(d&&d.getElementById('billTax')&&!w.__anuQuote&&!d.getElementById('anuQuoteScript')){var s=d.createElement('script');s.id='anuQuoteScript';s.src='quote-patch.js?v=7';d.body.appendChild(s)}
+  if(d&&d.getElementById('billTax')&&!w.__anuQuote&&!d.getElementById('anuQuoteScript')){var s=d.createElement('script');s.id='anuQuoteScript';s.src='quote-patch.js?v=8';d.body.appendChild(s)}
   if(w&&w.__anuQuote)clearInterval(t);
  }catch(e){}
  if(++n>7200)clearInterval(t);
