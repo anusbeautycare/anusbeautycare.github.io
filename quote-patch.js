@@ -84,8 +84,8 @@ var mk=[
  ['HD / Long-lasting Makeup: contouring, highlights and eye makeup, using good-quality products','9500','12500'],
  ['If the client provides the products',null],
  ["Men's Makeup",'2000',''],
- ['Corrective Makeup (Advance)','3500',''],
- ['HD Makeup','4500','']
+ ['Corrective Makeup (Advance)','4550',''],
+ ['HD Makeup','6550','']
 ];
 
 function ppSub(rate,c,pk){var n=pk?'package':'person';return String.fromCharCode(8377)+rate+' per '+(pk?'package':'person per makeup')+' x '+c+' '+n+(c===1?'':'s')}
@@ -200,21 +200,40 @@ var st=document.createElement('style');st.textContent=
 '#quoteDoc .qb{text-align:right;font:12px Arial;color:#555}'+
 '#quoteDoc h3{font:bold 14px Arial;margin:18px 0 4px;color:#770f2e}#quoteDoc ol{font:13px Arial;margin:0;padding-left:20px}#quoteDoc li{margin:3px 0}'+
 '#ws-bill .billrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}#ws-bill .billrow>span:first-child{flex:1 1 100%}#ws-bill .billrow>span:nth-child(2){flex:1 1 auto;font-weight:600}#ws-bill .billrow>button{padding:8px 14px;min-height:0;height:auto;align-self:center}#ws-bill .billrow input{width:100%;box-sizing:border-box;margin:4px 0}'+
-'body.qprint #quoteDoc{border:1.2px solid #c4a15a;padding:22px 20px;font-family:Georgia,serif}'+'#quoteDoc .qh{border-bottom:1px solid #c4a15a}#quoteDoc .qh img{max-height:150px;max-width:80%}'+'#quoteDoc h1{font-weight:normal;letter-spacing:.45em;color:#770f2e}'+'#quoteDoc th{background:none;color:#770f2e;border-top:1.2px solid #c4a15a;border-bottom:1.2px solid #c4a15a}#quoteDoc td{border-bottom:.6px solid #eadfc8}#quoteDoc tr.g td{background:#fbf6ea;color:#770f2e;font:bold 12px Arial;letter-spacing:.12em;text-transform:uppercase}#quoteDoc s{color:#8a7f83}#quoteDoc td.d{color:#770f2e;font-weight:bold}#quoteDoc h3{border-bottom:1px solid #c4a15a;padding-bottom:4px;text-transform:uppercase;letter-spacing:.12em;font-size:13px}'+'@media print{body.qprint{background:#fff}#quoteDoc{padding:0}@page{margin:14mm}}';
-document.head.appendChild(st);
+'body.qprint #quoteDoc{border:1.2px solid #c4a15a;padding:22px 20px;font-family:Georgia,serif}'+'#quoteDoc .qh{border-bottom:1px solid #c4a15a}#quoteDoc .qh img{max-height:150px;max-width:80%}'+'#quoteDoc h1{font-weight:normal;letter-spacing:.45em;color:#770f2e}'+'#quoteDoc th{background:none;color:#770f2e;border-top:1.2px solid #c4a15a;border-bottom:1.2px solid #c4a15a}#quoteDoc td{border-bottom:.6px solid #eadfc8}#quoteDoc tr.g td{background:#fbf6ea;color:#770f2e;font:bold 12px Arial;letter-spacing:.12em;text-transform:uppercase}#quoteDoc s{color:#8a7f83}#quoteDoc td.d{color:#770f2e;font-weight:bold}#quoteDoc h3{border-bottom:1px solid #c4a15a;padding-bottom:4px;text-transform:uppercase;letter-spacing:.12em;font-size:13px}'+'body.qprint #quoteDoc.z{padding:0;max-width:760px;font-family:"Cormorant Garamond",Georgia,serif;color:#2a2521}'+
+'#quoteDoc .zf{border:1.5px solid;border-image:linear-gradient(135deg,#d9c48a,#a8864f 50%,#e6d6a8) 1;padding:20px 18px 16px;margin:6px}'+
+'#quoteDoc .zl{text-align:center}#quoteDoc .zl img{height:34mm;max-height:150px;max-width:75%;object-fit:contain}'+
+'#quoteDoc .zt{text-align:center;font-style:italic;font-size:14px;letter-spacing:.1em;color:#a8864f;margin-top:6px}'+
+'#quoteDoc .zd{display:flex;align-items:center;justify-content:center;gap:10px;margin:10px 0 12px}#quoteDoc .zd i{width:70px;height:1px;background:#bdb3a4}#quoteDoc .zd b{width:6px;height:6px;background:#a8864f;transform:rotate(45deg)}'+
+'#quoteDoc .zh{font:300 24px Inter,Arial,sans-serif;letter-spacing:.18em;text-align:center}'+
+'#quoteDoc .zi{display:flex;gap:10px;border-top:1px solid #d9d2c6;border-bottom:1px solid #e3d6b8;margin-top:16px;padding:8px 4px 10px}#quoteDoc .zi div{flex:1;min-height:24px;font-size:16px;overflow-wrap:anywhere}'+
+'#quoteDoc .lb{display:block;font:500 9px Inter,Arial,sans-serif;letter-spacing:.26em;color:#a8864f;text-transform:uppercase;margin-bottom:3px}'+
+'#quoteDoc .zf table{width:100%;border-collapse:collapse;margin-top:14px}#quoteDoc .zf th{background:none;font:500 9px Inter,Arial,sans-serif;letter-spacing:.2em;color:#8d6c35;text-transform:uppercase;padding:8px 5px;border-top:0;border-bottom:1px solid #b8975c;text-align:left}'+
+'#quoteDoc .zf th.c,#quoteDoc .zf td.c{text-align:center}#quoteDoc .zf th.a,#quoteDoc .zf td.a{text-align:right;white-space:nowrap}'+
+'#quoteDoc .zf td{padding:9px 5px;border-bottom:1px solid #eee6d6;font:400 12.5px Inter,Arial,sans-serif;vertical-align:top}#quoteDoc .zf td.b{font:500 17px/1.2 "Cormorant Garamond",Georgia,serif}#quoteDoc .zf td.b small{display:block;font:italic 400 13px "Cormorant Garamond",Georgia,serif;color:#6d6459;margin-top:2px}'+
+'#quoteDoc .zf td.d{font-weight:500;color:#2a2521}#quoteDoc .zf tr.g td{font:500 9px Inter,Arial,sans-serif;letter-spacing:.24em;color:#a8864f;text-transform:uppercase;padding:12px 5px 5px;border-bottom:1px solid #b8975c;background:none}#quoteDoc .zf s{color:#8b8378}'+
+'#quoteDoc .zf th.a{white-space:normal;line-height:1.3}#quoteDoc .zf td.a{padding-left:2px;padding-right:2px}'+'#quoteDoc .zn{margin-top:14px}#quoteDoc .zn p{margin:4px 0;font:500 14px/1.3 "Cormorant Garamond",Georgia,serif}'+
+'#quoteDoc .zT{text-align:right;margin-top:12px;font:500 22px "Cormorant Garamond",Georgia,serif}#quoteDoc .zB{text-align:right;font:11px Inter,Arial,sans-serif;color:#6d6459}'+
+'#quoteDoc .zy{text-align:center;font-style:italic;font-size:16px;color:#6d6459;margin-top:16px}'+
+'@media print{body.qprint{background:#fff}#quoteDoc{padding:0}@page{margin:14mm}}';
+document.head.appendChild(st);var fl=document.createElement('link');fl.rel='stylesheet';fl.href='https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500&display=swap';document.head.appendChild(fl);
 function esc(x){return String(x).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 function money(p){return String.fromCharCode(8377)+(p/100).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2})}
-function buildDoc(){
- var d=$('quoteDoc');if(!d){d=document.createElement('div');d.id='quoteDoc';document.body.appendChild(d)}
- var logo=document.querySelector('img[alt$="current logo"]');
- var rows=lines.map(function(l,i){var a=l.base!==undefined?esc(l.base)+'<small>'+ppSub(l.rate,l.n,l.pk)+'</small>':esc(l.name);return '<tr><td>'+(i+1)+'</td><td>'+a+'</td><td class="a">'+money(l.amount)+'</td></tr>'});
+function zHead(title,sub){
+ var logo=document.querySelector('img[alt$="current logo"]');var nt=$('quoteNote').value.trim(),cl=$('billClient').value.trim();
+ return '<div class="zf"><div class="zl">'+(logo?'<img src="'+logo.src+'" alt="Anu\'s Beauty Care logo">':'<div style="font-size:26px;color:#770f2e">Anu\'s Beauty Care</div>')+'</div><div class="zt">A space for beauty. A moment for you.</div><div class="zd"><i></i><b></b><i></i></div><div class="zh">'+title+'</div>'+(sub?'<div style="text-align:center;font:italic 15px Georgia,serif;color:#6d6459;margin-top:4px">'+sub+'</div>':'')+
+ '<div class="zi"><div><span class="lb">Client</span>'+esc(cl)+'</div><div style="flex:2"><span class="lb">Event date / venue</span>'+esc(nt)+'</div></div>';
+}
+function zTerms(extra){
  var pts=ta.value.split('\n').map(function(x){return x.trim()}).filter(function(x){var i=x.indexOf(':');return x&&(i<0||x.slice(i+1).trim())});
- var cl=$('billClient').value.trim(),nt=$('quoteNote').value.trim();
- d.innerHTML='<div class="qh">'+(logo?'<img src="'+logo.src+'" alt="Anu\'s Beauty Care logo">':'')+(logo?'':'<div class="qw">Anu\'s<small>BEAUTY CARE</small></div>')+'</div>'+
- '<h1>'+(isQuote()?'QUOTATION':'BILL DRAFT')+'</h1>'+(cl?'<p class="qm"><b>Client:</b> '+esc(cl)+'</p>':'')+(nt?'<p class="qm">'+esc(nt)+'</p>':'')+
- '<table><thead><tr><th>#</th><th>Description</th><th class="a">Amount</th></tr></thead><tbody>'+(rows.join('')||'<tr><td colspan="3">No items added yet.</td></tr>')+'</tbody></table>'+
- '<div class="qt">Total '+esc($('billTotal').textContent)+'</div><div class="qb">'+esc($('billBreakdown').textContent.replace(/\s*Draft total only\.?/,''))+'</div>'+
- (pts.length?'<h3>Terms and conditions</h3><ol>'+pts.map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ol>':'');
+ return '<div class="zn">'+(extra?'<p>'+extra+'</p>':'')+'<span class="lb">Terms and conditions</span><ul style="margin:6px 0 0;padding-left:16px">'+pts.map(function(x){var i=x.indexOf(':');return '<li style="margin:4px 0;font:500 14px/1.3 Cormorant Garamond,Georgia,serif">'+(i<0?esc(x):'<b style="font-weight:600">'+esc(x.slice(0,i))+':</b> '+esc(x.slice(i+1).trim()))+'</li>'}).join('')+'</ul></div><div class="zy">Thank You</div></div>';
+}
+function buildDoc(){
+ var d=$('quoteDoc');if(!d){d=document.createElement('div');d.id='quoteDoc';document.body.appendChild(d)}d.className='z';
+ var rows=lines.map(function(l,i){var a=l.base!==undefined?esc(l.base)+'<small>'+ppSub(l.rate,l.n,l.pk)+'</small>':esc(l.name);return '<tr><td class="c">'+(i+1)+'</td><td class="b">'+a+'</td><td class="a d">'+money(l.amount)+'</td></tr>'});
+ d.innerHTML=zHead(isQuote()?'QUOTATION':'BILL DRAFT')+
+ '<table><thead><tr><th class="c" style="width:40px">Sr.<br>No.</th><th>Particular</th><th class="a">Amount</th></tr></thead><tbody>'+(rows.join('')||'<tr><td colspan="3">No items added yet.</td></tr>')+'</tbody></table>'+
+ '<div class="zT">Total '+esc($('billTotal').textContent)+'</div><div class="zB">'+esc($('billBreakdown').textContent.replace(/\s*Draft total only\.?/,''))+'</div>'+zTerms('');
 }
 function doPrint(){buildDoc();document.body.classList.add('qprint');window.__qp=1;setTimeout(function(){window.print()},50)}
 window.addEventListener('afterprint',function(){document.body.classList.remove('qprint')});
@@ -225,19 +244,13 @@ if(oldPrint&&oldPrint.parentNode){oldPrint.parentNode.insertBefore(pb,oldPrint.n
 
 /* Price list quotation (from the owner's handwritten notes): customer-facing document with the Anu logo. */
 function buildPriceDoc(){
- var d=$('quoteDoc');if(!d){d=document.createElement('div');d.id='quoteDoc';document.body.appendChild(d)}
- var logo=document.querySelector('img[alt$="current logo"]');
+ var d=$('quoteDoc');if(!d){d=document.createElement('div');d.id='quoteDoc';document.body.appendChild(d)}d.className='z';
  var rows=[],lastG=null,n=0;var R=String.fromCharCode(8377);reg.filter(function(r){return !r.pk}).forEach(function(r){
   var v=r.p.value,x=mk.filter(function(m){return m[0]===r.name})[0],rg=x&&x[2];
-  if(r.grp!==lastG){lastG=r.grp;rows.push('<tr class="g"><td colspan="4">'+esc(lastG)+'</td></tr>')}n++;
-  rows.push('<tr><td>'+n+'</td><td>'+esc(r.name)+'</td><td class="a">'+(rg?'<s>'+R+Number(rg).toLocaleString('en-IN')+'</s>':'&mdash;')+'</td><td class="a d">'+(v?R+Number(v).toLocaleString('en-IN'):'To be confirmed')+'</td></tr>')});
- var nt=$('quoteNote').value.trim(),cl=$('billClient').value.trim();
- var pts=ta.value.split('\n').map(function(x){return x.trim()}).filter(function(x){return x});
- var th=pts.map(function(x){var i=x.indexOf(':');return '<li>'+(i<0?esc(x):'<b>'+esc(x.slice(0,i))+'</b>: '+esc(x.slice(i+1).trim()))+'</li>'}).join('');
- d.innerHTML='<div class="qh">'+(logo?'<img src="'+logo.src+'" alt="Anu\'s Beauty Care logo">':'<div class="qw">Anu\'s<small>BEAUTY CARE</small></div>')+'</div>'+
- '<h1>QUOTATION</h1><p class="qm" style="text-align:center">Makeup rates, per person, per makeup</p>'+(cl?'<p class="qm"><b>Client:</b> '+esc(cl)+'</p>':'')+(nt?'<p class="qm">'+esc(nt)+'</p>':'')+
- '<table><thead><tr><th>#</th><th>Makeup</th><th class="a">Our rates</th><th class="a">Discounted rates</th></tr></thead><tbody>'+rows.join('')+'</tbody></table>'+
- '<p class="qm" style="font-size:12px;color:#555">No change in rate for Men\'s Makeup and Basic Makeup + Hairstyle.</p><h3>Terms and conditions</h3><ol>'+th+'</ol>';
+  if(r.grp!==lastG){lastG=r.grp;n=0;rows.push('<tr class="g"><td colspan="4">'+esc(lastG)+'</td></tr>')}n++;
+  rows.push('<tr><td class="c">'+n+'</td><td class="b">'+esc(r.name)+'</td><td class="a">'+(rg?'<s>'+R+Number(rg).toLocaleString('en-IN')+'</s>':'&mdash;')+'</td><td class="a d">'+(v?R+Number(v).toLocaleString('en-IN'):'To be confirmed')+'</td></tr>')});
+ d.innerHTML=zHead('QUOTATION','Makeup rates, per person, per makeup')+
+ '<table><thead><tr><th class="c" style="width:40px">Sr.<br>No.</th><th>Particular</th><th class="a">Our rates</th><th class="a">Discounted rates</th></tr></thead><tbody>'+rows.join('')+'</tbody></table>'+zTerms('No change in rate for Men\'s Makeup and Basic Makeup + Hairstyle.');
 }
 function doPricePrint(){buildPriceDoc();document.body.classList.add('qprint');window.__qp=1;setTimeout(function(){window.print()},50)}
 window.__anuPricePreview=function(){buildPriceDoc();document.body.classList.add('qprint')};
