@@ -78,7 +78,7 @@ window.billShareContent=billShareContent=function(){
 
 /* Makeup price list copied from the owner's two handwritten note pages. Rates are as written. Nothing is added to the quotation until Add is tapped. */
 var mk=[
- ['With salon products',null],
+ ['With Anu\'s products',null],
  ['Basic Makeup + Hairstyle','2700',''],
  ['Corrective Makeup: dark-spot correction, contouring and highlights, with eye makeup','6500','8000'],
  ['HD / Long-lasting Makeup: contouring, highlights and eye makeup, using good-quality products','9500','12500'],
