@@ -212,17 +212,18 @@ var st=document.createElement('style');st.textContent=
 '#quoteDoc .zf th.c,#quoteDoc .zf td.c{text-align:center}#quoteDoc .zf th.a,#quoteDoc .zf td.a{text-align:right;white-space:nowrap}'+
 '#quoteDoc .zf td{padding:9px 5px;border-bottom:1px solid #eee6d6;font:400 12.5px Inter,Arial,sans-serif;vertical-align:top}#quoteDoc .zf td.b{font:500 17px/1.2 "Cormorant Garamond",Georgia,serif}#quoteDoc .zf td.b small{display:block;font:italic 400 13px "Cormorant Garamond",Georgia,serif;color:#6d6459;margin-top:2px}'+
 '#quoteDoc .zf td.d{font-weight:600;color:#770f2e}#quoteDoc .zf tr.g td{font:500 9px Inter,Arial,sans-serif;letter-spacing:.24em;color:#770f2e;text-transform:uppercase;padding:12px 5px 5px;border-bottom:1px solid #b8975c;background:none}#quoteDoc .zf s{color:#8b8378}'+
-'#quoteDoc .zf th.a{white-space:normal;line-height:1.3}#quoteDoc .zf td.a{padding-left:2px;padding-right:2px}'+'#quoteDoc .zn{margin-top:14px}#quoteDoc .zn p{margin:4px 0;font:500 14px/1.3 "Cormorant Garamond",Georgia,serif}'+
+'#quoteDoc .zf th.a{white-space:normal;line-height:1.3}#quoteDoc .zf td.a{padding-left:2px;padding-right:2px;font:500 17px "Cormorant Garamond",Georgia,serif;font-variant-numeric:lining-nums}#quoteDoc .zf td.d{font-weight:700}'+'#quoteDoc .zn{margin-top:14px}#quoteDoc .zn p{margin:4px 0;font:500 14px/1.3 "Cormorant Garamond",Georgia,serif}'+
 '#quoteDoc .zT{text-align:right;margin-top:12px;font:500 22px "Cormorant Garamond",Georgia,serif}#quoteDoc .zB{text-align:right;font:11px Inter,Arial,sans-serif;color:#6d6459}'+
 '#quoteDoc .zy{text-align:center;font-style:italic;font-size:16px;color:#6d6459;margin-top:16px}'+
 '@media print{body.qprint{background:#fff}#quoteDoc{padding:0}@page{margin:14mm}}';
 document.head.appendChild(st);var fl=document.createElement('link');fl.rel='stylesheet';fl.href='https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500&display=swap';document.head.appendChild(fl);
 function esc(x){return String(x).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 function money(p){return String.fromCharCode(8377)+(p/100).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2})}
+var docDate=null;function dstr(){return docDate||new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})}
 function zHead(title,sub){
  var logo=document.querySelector('img[alt$="current logo"]');var nt=$('quoteNote').value.trim(),cl=$('billClient').value.trim();
  return '<div class="zf"><div class="zl">'+(logo?'<img src="'+logo.src+'" alt="Anu\'s Beauty Care logo">':'<div style="font-size:26px;color:#770f2e">Anu\'s Beauty Care</div>')+'</div><div class="zt">A space for beauty. A moment for you.</div><div class="zd"><i></i><b></b><i></i></div><div class="zh">'+title+'</div>'+(sub?'<div style="text-align:center;font:italic 15px Georgia,serif;color:#6d6459;margin-top:4px">'+sub+'</div>':'')+
- '<div class="zi"><div><span class="lb">Client</span>'+esc(cl)+'</div>'+(nt?'<div style="flex:2"><span class="lb">Date / Venue</span>'+esc(nt)+'</div>':'<div><span class="lb">Date</span></div><div><span class="lb">Venue</span></div>')+'</div>';
+ '<div class="zi"><div><span class="lb">Client</span>'+esc(cl)+'</div>'+(nt?'<div style="flex:2"><span class="lb">Date / Venue</span>'+esc(nt)+'</div>':'<div><span class="lb">Date</span>'+dstr()+'</div><div><span class="lb">Venue</span></div>')+'</div>';
 }
 function zTerms(extra){
  var pts=ta.value.split('\n').map(function(x){return x.trim()}).filter(function(x){var i=x.indexOf(':');return x&&(i<0||x.slice(i+1).trim())});
@@ -248,7 +249,7 @@ function buildPriceDoc(){
  var rows=[],lastG=null,n=0;var R=String.fromCharCode(8377);reg.filter(function(r){return !r.pk}).forEach(function(r){
   var v=r.p.value,x=mk.filter(function(m){return m[0]===r.name})[0],rg=x&&x[2];
   if(r.grp!==lastG){lastG=r.grp;n=0;rows.push('<tr class="g"><td colspan="4">'+esc(lastG)+'</td></tr>')}n++;
-  rows.push('<tr><td class="c">'+n+'</td><td class="b">'+esc(r.name)+'</td><td class="a">'+(rg?'<s>'+R+Number(rg).toLocaleString('en-IN')+'</s>':'&mdash;')+'</td><td class="a d">'+(v?R+Number(v).toLocaleString('en-IN'):'To be confirmed')+'</td></tr>')});
+  rows.push('<tr><td class="c">'+n+'</td><td class="b">'+esc(r.name)+'</td><td class="a">'+(rg?R+Number(rg).toLocaleString('en-IN'):'&mdash;')+'</td><td class="a d">'+(v?R+Number(v).toLocaleString('en-IN'):'To be confirmed')+'</td></tr>')});
  d.innerHTML=zHead('QUOTATION','Makeup rates, per person, per makeup')+
  '<table><thead><tr><th class="c" style="width:40px">Sr.<br>No.</th><th>Particular</th><th class="a">Our rates</th><th class="a">Discounted rates</th></tr></thead><tbody>'+rows.join('')+'</tbody></table>'+zTerms('No change in rate for Men\'s Makeup and Basic Makeup + Hairstyle.');
 }
@@ -283,6 +284,7 @@ function renderSaved(){
  });
 }
 function openDoc(x){
+ docDate=x.dateLong||x.date||null;
  lines.length=0;x.lines.forEach(function(l){lines.push(JSON.parse(JSON.stringify(l)))});
  $('docType').value=x.type;$('billClient').value=x.client||'';$('quoteNote').value=x.note||'';ta.value=x.terms||ta.value;
  labels();renderBill();$('quoteExtras').scrollIntoView({behavior:'smooth',block:'start'});
@@ -290,7 +292,7 @@ function openDoc(x){
 var sb=document.createElement('button');sb.type='button';sb.id='quoteSave';sb.textContent='Save to Created list';
 sb.onclick=function(){
  if(!lines.length){alert('Add at least one item first.');return}
- var a=loadList();a.push({id:Date.now()+'-'+Math.random().toString(36).slice(2,7),type:isQuote()?'quote':'bill',client:$('billClient').value.trim(),note:$('quoteNote').value.trim(),terms:ta.value,date:new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}),lines:JSON.parse(JSON.stringify(lines))});
+ var a=loadList();a.push({id:Date.now()+'-'+Math.random().toString(36).slice(2,7),type:isQuote()?'quote':'bill',client:$('billClient').value.trim(),note:$('quoteNote').value.trim(),terms:ta.value,date:new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}),dateLong:dstr(),lines:JSON.parse(JSON.stringify(lines))});
  if(storeList(a)){renderSaved();sb.textContent='Saved';setTimeout(function(){sb.textContent='Save to Created list'},1500)}
 };
 pb.parentNode.insertBefore(sb,pb);
