@@ -90,23 +90,50 @@ var mk=[
  ['HD Make up','4500','4000 is crossed out, 4500 written. Product not stated.']
 ];
 
-function ppName(base,rate,c){return base+' ('+String.fromCharCode(8377)+rate+' per person per makeup x '+c+(c===1?' person)':' persons)')}
-function addPP(base,rate,c){lines.push({name:ppName(base,rate,c),amount:Math.round(rate*c*100),base:base,rate:rate,n:c});renderBill()}
+function ppSub(rate,c,pk){var n=pk?'package':'person';return String.fromCharCode(8377)+rate+' per '+(pk?'package':'person per makeup')+' x '+c+' '+n+(c===1?'':'s')}
+function ppName(base,rate,c,pk){return base+' ('+ppSub(rate,c,pk)+')'}
+function addPP(base,rate,c,pk){lines.push({name:ppName(base,rate,c,pk),amount:Math.round(rate*c*100),base:base,rate:rate,n:c,pk:pk});renderBill()}
 var mkWrap=document.createElement('div');mkWrap.id='mkList';
 var mkTitle=document.createElement('h3');mkTitle.style.cssText='margin:22px 0 4px;font-size:18px';mkTitle.textContent='Makeup price list from your notes';
 var mkInfo=document.createElement('p');mkInfo.className='wsnote';mkInfo.textContent='Rates are per person, per makeup, as written in your two note pages. Every rate is per person, per makeup. Set the number of persons on each item (it starts at 1). Change the name or rate here, then tap Add. After adding, tap Edit on the line to change it again. Page 2 also says: no change for Man and Basic Make up. Travel allowance (the circled Petrol) and food are listed under Terms and conditions below.';
 mkWrap.appendChild(mkTitle);mkWrap.appendChild(mkInfo);
-mk.forEach(function(r){
- if(r[1]===null){var h=document.createElement('p');h.className='wsnote';h.style.cssText='margin-top:16px;font-weight:600';h.textContent=r[0];mkWrap.appendChild(h);return}
+function buildCards(list,wrap,pk){list.forEach(function(r){
+ if(r[1]===null){var h=document.createElement('p');h.className='wsnote';h.style.cssText='margin-top:16px;font-weight:600';h.textContent=r[0];wrap.appendChild(h);return}
  var d=document.createElement('div');d.style.cssText='border:1px solid #e3d6dc;border-radius:14px;padding:12px;margin-top:10px';
  var n=document.createElement('input');n.value=r[0];n.maxLength=140;n.setAttribute('aria-label','Item name');
- var p=document.createElement('input');p.type='number';p.min='0';p.step='0.01';p.value=r[1];p.placeholder='Enter rate per person';p.setAttribute('aria-label','Rate per person in INR');var pl=document.createElement('label');pl.textContent='Rate per person, per makeup (INR)';var nl=document.createElement('label');nl.textContent='Number of persons';var np=document.createElement('input');np.type='number';np.min='1';np.max='99';np.step='1';np.value='1';np.setAttribute('aria-label','Number of persons');
+ var p=document.createElement('input');p.type='number';p.min='0';p.step='0.01';p.value=r[1];p.placeholder=(pk?'Enter rate per package':'Enter rate per person');p.setAttribute('aria-label',(pk?'Rate per package in INR':'Rate per person in INR'));var pl=document.createElement('label');pl.textContent=(pk?'Rate per package (INR)':'Rate per person, per makeup (INR)');var nl=document.createElement('label');nl.textContent=(pk?'Quantity (number of packages)':'Number of persons');var np=document.createElement('input');np.type='number';np.min='1';np.max='99';np.step='1';np.value='1';np.setAttribute('aria-label',(pk?'Quantity (number of packages)':'Number of persons'));
  var t=document.createElement('p');t.className='wsnote';t.textContent=r[2];
  var b=document.createElement('button');b.type='button';b.textContent='Add to quotation';
- b.onclick=function(){var v=Number(p.value),c=Math.floor(Number(np.value));if(!n.value.trim()){alert('Enter the item name.');return}if(!p.value||!isFinite(v)||v<0){alert('Enter the rate per person first.');return}if(!isFinite(c)||c<1){alert('Enter the number of persons (1 or more).');return}addPP(n.value.trim(),v,c);b.textContent='Added';setTimeout(function(){b.textContent='Add to quotation'},2000)};
- d.appendChild(n);d.appendChild(pl);d.appendChild(p);d.appendChild(nl);d.appendChild(np);d.appendChild(t);d.appendChild(b);mkWrap.appendChild(d);
-});
+ b.onclick=function(){var v=Number(p.value),c=Math.floor(Number(np.value));if(!n.value.trim()){alert('Enter the item name.');return}if(!p.value||!isFinite(v)||v<0){alert('Enter the rate first.');return}if(!isFinite(c)||c<1){alert('Enter the quantity (1 or more).');return}addPP(n.value.trim(),v,c,pk);b.textContent='Added';setTimeout(function(){b.textContent='Add to quotation'},2000)};
+ d.appendChild(n);d.appendChild(pl);d.appendChild(p);d.appendChild(nl);d.appendChild(np);d.appendChild(t);d.appendChild(b);wrap.appendChild(d);
+});}
 box.insertBefore(mkWrap,box.querySelector('h3'));
+buildCards(mk,mkWrap,false);
+var br=[
+ ['Headline prices shown on the app Bridal Packages page',null],
+ ['Pre Bridal Basic: face and back bleach / de-tan, bridal facial, hand and full leg wax, manicure, pedicure, threading','5500',''],
+ ['Pre Bridal Advanced: face and back bleach / de-tan, advanced bridal facial, hand and full leg wax, body polishing, hand nail art, threading','12000',''],
+ ['Pre Bridal Premium: face / body bleach, face polishing, advanced body polishing and pack, special facial, full-body or hand-and-leg wax, hair spa, hand and toe nail art, threading','20000',''],
+ ['Make-up + Pre Bridal: 1 HD make-up + Basic pre bridal','18000',''],
+ ['Make-up + Pre Bridal: 1 HD + 1 Haldi / Sangeet + Basic pre bridal','30500',''],
+ ['Make-up + Pre Bridal: 1 HD + 1 Haldi / Sangeet + Advanced pre bridal','37500',''],
+ ['Make-up + Pre Bridal: 2 HD + 1 Haldi / Sangeet + 1 touch-up + Basic pre bridal','43000',''],
+ ['Make-up + Pre Bridal: 2 HD + 1 Haldi / Sangeet + 1 touch-up + Advanced pre bridal','55000',''],
+ ['Make-up + Pre Bridal: 2 HD + 1 Haldi / Sangeet + 1 touch-up + Premium pre bridal','62500',''],
+ ["Anu's Package list: the app says confirmation is needed before billing, so the rate is left blank. Enter the confirmed rate to add.",null],
+ ["Anu's Package 1: 1 HD make-up + Basic pre bridal",'',"The app page shows 15,500 for this package. Confirmation needed before billing."],
+ ["Anu's Package 2: 1 HD + 1 Haldi / Sangeet + Basic pre bridal",'',"The app page shows 25,500. Confirmation needed before billing."],
+ ["Anu's Package 3: 1 HD + 1 Haldi / Sangeet + Advanced pre bridal",'',"The app page shows 33,000. Confirmation needed before billing."],
+ ["Anu's Package 4: 2 HD + 1 Haldi / Sangeet + 1 touch-up + Basic pre bridal",'',"The app page shows 39,000. Confirmation needed before billing."],
+ ["Anu's Package 5: 2 HD + 1 Haldi / Sangeet + 1 touch-up + Advanced pre bridal",'',"The app page shows 50,000. Confirmation needed before billing."],
+ ["Anu's Package 6: 2 HD + 1 Haldi / Sangeet + 1 touch-up + Premium pre bridal",'',"The app page shows 58,000. Confirmation needed before billing."]
+];
+var brWrap=document.createElement('div');brWrap.id='brList';
+var brTitle=document.createElement('h3');brTitle.style.cssText='margin:22px 0 4px;font-size:18px';brTitle.textContent='Bridal packages';
+var brInfo=document.createElement('p');brInfo.className='wsnote';brInfo.textContent='Packages and headline prices copied from the app Bridal Packages page. Rate is per package, quantity starts at 1. You can change the name or rate before adding, and tap Edit on the line afterwards.';
+brWrap.appendChild(brTitle);brWrap.appendChild(brInfo);buildCards(br,brWrap,true);
+box.insertBefore(brWrap,mkWrap.nextSibling);
+
 
 /* Edit a line after it is added: name or details, and rate. */
 var origRender=renderBill;
@@ -118,15 +145,15 @@ function decorate(){
    var x=lines[i];if(!x)return;row.textContent='';
    var pp=x.base!==undefined;
    var n=document.createElement('input');n.value=pp?x.base:x.name;n.maxLength=160;n.setAttribute('aria-label','Item name or details');
-   var p=document.createElement('input');p.type='number';p.min='0';p.step='0.01';p.value=String(pp?x.rate:x.amount/100);p.setAttribute('aria-label',pp?'Rate per person in INR':'Amount in INR');
+   var p=document.createElement('input');p.type='number';p.min='0';p.step='0.01';p.value=String(pp?x.rate:x.amount/100);p.setAttribute('aria-label',pp?(x.pk?'Rate per package in INR':'Rate per person in INR'):'Amount in INR');
    var q=document.createElement('input');q.type='number';q.min='1';q.step='1';q.value=pp?String(x.n):'1';q.setAttribute('aria-label','Number of persons');
    var sv=document.createElement('button');sv.type='button';sv.textContent='Save change';
    var cn=document.createElement('button');cn.type='button';cn.textContent='Cancel';
-   sv.onclick=function(){var v=Number(p.value),c=Math.floor(Number(q.value));if(!n.value.trim()){alert('Enter the item name.');return}if(!p.value||!isFinite(v)||v<0){alert('Enter the rate.');return}if(pp){if(!isFinite(c)||c<1){alert('Enter the number of persons (1 or more).');return}lines[i]={name:ppName(n.value.trim(),v,c),amount:Math.round(v*c*100),base:n.value.trim(),rate:v,n:c}}else lines[i]={name:n.value.trim(),amount:Math.round(v*100)};renderBill()};
+   sv.onclick=function(){var v=Number(p.value),c=Math.floor(Number(q.value));if(!n.value.trim()){alert('Enter the item name.');return}if(!p.value||!isFinite(v)||v<0){alert('Enter the rate.');return}if(pp){if(!isFinite(c)||c<1){alert('Enter the quantity (1 or more).');return}lines[i]={name:ppName(n.value.trim(),v,c,x.pk),amount:Math.round(v*c*100),base:n.value.trim(),rate:v,n:c,pk:x.pk}}else lines[i]={name:n.value.trim(),amount:Math.round(v*100)};renderBill()};
    cn.onclick=function(){renderBill()};
-   var lb=document.createElement('label');lb.textContent=pp?'Rate per person, per makeup (INR)':'Amount (INR)';
+   var lb=document.createElement('label');lb.textContent=pp?(x.pk?'Rate per package (INR)':'Rate per person, per makeup (INR)'):'Amount (INR)';
    row.style.display='block';row.appendChild(n);row.appendChild(lb);row.appendChild(p);
-   if(pp){var l2=document.createElement('label');l2.textContent='Number of persons';row.appendChild(l2);row.appendChild(q)}
+   if(pp){var l2=document.createElement('label');l2.textContent=x.pk?'Quantity (number of packages)':'Number of persons';row.appendChild(l2);row.appendChild(q)}
    row.appendChild(sv);row.appendChild(cn);
    return;
    row.style.display='block';row.appendChild(n);row.appendChild(p);row.appendChild(sv);row.appendChild(cn);
@@ -175,7 +202,7 @@ function money(p){return String.fromCharCode(8377)+(p/100).toLocaleString('en-IN
 function buildDoc(){
  var d=$('quoteDoc');if(!d){d=document.createElement('div');d.id='quoteDoc';document.body.appendChild(d)}
  var logo=document.querySelector('img[alt$="current logo"]');
- var rows=lines.map(function(l,i){var a=l.base!==undefined?esc(l.base)+'<small>'+String.fromCharCode(8377)+l.rate+' per person per makeup x '+l.n+(l.n===1?' person':' persons')+'</small>':esc(l.name);return '<tr><td>'+(i+1)+'</td><td>'+a+'</td><td class="a">'+money(l.amount)+'</td></tr>'});
+ var rows=lines.map(function(l,i){var a=l.base!==undefined?esc(l.base)+'<small>'+ppSub(l.rate,l.n,l.pk)+'</small>':esc(l.name);return '<tr><td>'+(i+1)+'</td><td>'+a+'</td><td class="a">'+money(l.amount)+'</td></tr>'});
  var pts=ta.value.split('\n').map(function(x){return x.trim()}).filter(function(x){var i=x.indexOf(':');return x&&(i<0||x.slice(i+1).trim())});
  var cl=$('billClient').value.trim(),nt=$('quoteNote').value.trim();
  d.innerHTML='<div class="qh">'+(logo?'<img src="'+logo.src+'" alt="Anu\'s Beauty Care logo">':'')+(logo?'':'<div class="qw">Anu\'s<small>BEAUTY CARE</small></div>')+'</div>'+
